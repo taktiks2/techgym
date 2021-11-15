@@ -15,7 +15,7 @@ class Team():
         self.name: str = name
         self.attack: int = attack
         self.defense: int = defense
-        self.total_score: int = 0
+        self.total_score: int =0
     
     def info(self):
         print(f'{self.id_num} ) {self.name}: 攻撃力:{self.attack} / 守備力:{self.defense}')
