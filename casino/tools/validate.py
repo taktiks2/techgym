@@ -6,6 +6,8 @@ def valid_integer(string: str, max: int, min: int = 1):
         if min <= int(string) <= max:
             return True
         else:
+            print(f'※{min}から{max}の範囲で入力してください')
             return False
     else:
+        print('※数字で入力してください')
         return False
