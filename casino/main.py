@@ -1,15 +1,15 @@
 import os
-import phase
+from game import *
 from tools.drawing import border
 
 
 def main():
     os.system('cls')
-    phase.create_players()
+    create_players()
     border()
-    phase.show_players()
+    show_players()
     border()
-    phase.bet_phase()
+    bet_phase()
     border()
 
 
