@@ -4,10 +4,10 @@ from tools.drawing import border
 
 
 class Game:
-    players: list = []
-    bet_table: dict = {}
-    player_bets: dict = {}
-
+    players: list = []  # プレイヤーとコンピューターのインスタンスリスト
+    bet_table: dict = {}  # {player.name: {'place': place, 'bet': coin}}
+    winners: list = []
+    hit_pocket: str = ''
 
 def create_players():
     '''プレイヤー1人とコンピューター3人のリストを作成
@@ -20,13 +20,6 @@ def create_players():
             Game.players.append(Computer(name, Player.INITIAL_COIN)) 
 
 
-def show_players():
-    '''プレイヤーを表示
-    '''
-    for player in Game.players:
-        player.info()
-
-
 def init_bet_table():
     '''ベット表を初期化
     '''
@@ -37,12 +30,10 @@ def init_bet_table():
         Game.bet_table[row] = bets
      
     
-def update_bet_table(player_bets: dict):
+def update_bet_table():
     '''ベット表をアップデート'''
-    index: int = 0
-    for place, coin in player_bets.items():
-        Game.bet_table[place][Player.NAMES[index]] = coin
-        index += 1
+    for player in Game.players:
+        Game.bet_table[player.bet_place][player.name] = player.bet_coin
         
 
 def show_bet_table():
@@ -52,7 +43,6 @@ def show_bet_table():
     # 行題目を作成
     bet_names: list = [border + ' _____ ' + border,]
     red_flag: int = 0
-    create_table()
     for cell in Cell.table:
         string: str = f' {cell.name}(x{cell.rate}) '
         colored_string: str = ''
@@ -68,28 +58,107 @@ def show_bet_table():
     row: int = 1
     for value in Game.bet_table.values():
         for index in range(len(Player.NAMES)):
-            bet_names[row] += f' {str(value[Player.NAMES[index]]).zfill(2)} ' + border
+            num: str = str(value[Player.NAMES[index]]).zfill(2)
+            if not num == '00':
+                colored_num: str = coloring(Cell.COLORS[3], num)
+                print(colored_num)
+                bet_names[row] += f' {colored_num} ' + border
+            else:
+                bet_names[row] += f' {num} ' + border
+                
         row += 1
     # 表を描画
     for row in bet_names:
         print(row)
-        
 
-def bet_phase():
-    '''ベット処理
+
+def set_bet_coin():
+    for player in Game.players:
+        player.bet()
+
+
+def show_bet_coin():
+    for player in Game.players:
+        print(f'{player.name}は {player.bet_coin}コイン を「{player.bet_place}」にBETしました。')
+
+
+def set_hit_pocket():
+    '''当たりを設定
+    '''
+    Game.hit_pocket = 'R'  # random.choice(Cell.NAMES)
+
+
+def show_hit_pocket():
+    print(f'選ばれたのは「{Game.hit_pocket}」')
+
+
+def set_winner():
+    '''当たりプレイヤーの判定
+    '''
+    for player in Game.players:
+        if player.bet_place == Game.hit_pocket:
+            Game.winners.append(player)
+
+
+def get_rate():
+    if Game.hit_pocket == Cell.NAMES[0] \
+        or Game.hit_pocket == Cell.NAMES[1]:
+        return Cell.RATES[0]
+    else:
+        return Cell.RATES[1]
+
+
+def calc_winning_coin(bet_coin: int):
+    rate: int = get_rate()
+    return bet_coin * rate
+
+
+def set_winning_coin():
+    for winner in Game.winners:
+        winning_coin: int = calc_winning_coin(winner.bet_coin)
+        winner.winning_coin = winning_coin
+        winner.get_coin(winning_coin)
+        
+def show_winners():
+    for winner in Game.winners:
+        print(f'{winner.name}は当たり {winner.winning_coin} を獲得しました')
+            
+
+def show_coin():
+    msg: str = '[持ちコイン]'
+    for player in Game.players:
+        msg += f' {player.name}:{player.coin} /'
+    print(msg)
+
+def set_game():
+    create_players()
+    create_table()
+    
+
+def play_once():
+    '''一回のプレイの流れ
     '''
     init_bet_table()
     show_bet_table()
-    for player in Game.players:
-        player.bet()
-        print(f'{player.name}は {player.bet_coin}コイン を「{player.bet_place}」にBETしました。')
-        Game.player_bets[player.bet_place] = player.bet_coin
-    update_bet_table(Game.player_bets)
+    show_coin()
+    
+    set_bet_coin()
+    show_bet_coin()
+    update_bet_table()
     show_bet_table()
+    
+    set_hit_pocket()
+    show_hit_pocket()
+    
+    set_winner()
+    set_winning_coin()
+    show_winners()
+    show_coin()
+
 
 def main():
     create_players()
-    bet_phase()
+
 
 if __name__ == '__main__':
     main()

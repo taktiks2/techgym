@@ -1,17 +1,14 @@
 import os
 from game import *
-from tools.drawing import border
 
 
 def main():
     os.system('cls')
-    create_players()
-    border()
-    show_players()
-    border()
-    bet_phase()
-    border()
-
+    set_game()
+    
+    while True:
+        play_once()
+    
 
 if __name__ == '__main__':
     main()

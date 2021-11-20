@@ -17,11 +17,11 @@ class Player:
         self.coin: int = coin
         self.bets: dict = {}
     
-    def info(self):
-        print(f'{self.name} : {self.coin}')
-    
     def set_bet_coin(self, bet_coin: int):
         self.coin -= bet_coin
+    
+    def get_coin(self, winning_coin: int):
+        self.coin += winning_coin
 
 
 class Human(Player):
@@ -30,6 +30,7 @@ class Human(Player):
         super().__init__(name, coin)
         self.bet_coin: int = 0
         self.bet_place: str = ''
+        self.winnning_coin: int = 0
     
     def bet(self):
         max: int = self.coin if self.coin < Player.MAX_BET else Player.MAX_BET
@@ -54,6 +55,7 @@ class Computer(Player):
         super().__init__(name, coin)
         self.bet_coin: int = 0
         self.bet_place: str = ''
+        self.winning_coin: int = 0
     
     def bet(self):
         max: int = self.coin if self.coin < Player.MAX_BET else Player.MAX_BET
