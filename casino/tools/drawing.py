@@ -1,2 +1,2 @@
-def border(num: int = 20):
+def border(num: int = 25):
     print('--' * num)

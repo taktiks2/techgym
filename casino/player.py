@@ -6,7 +6,7 @@ from tools.validate import *
 
 class Player:
     INITIAL_COIN: int = 500
-    MAX_BET: int = 99
+    MAX_BET: int = 400
     NAMES: list = ['MY',
                   'C1',
                   'C2',
@@ -36,15 +36,16 @@ class Human(Player):
         max: int = self.coin if self.coin < Player.MAX_BET else Player.MAX_BET
         while True:
             string: str = input(f'何枚BETしますか？(1-{max}): ')
-            if valid_integer(string, Player.MAX_BET):
+            if valid_integer(string, max):
                 self.bet_coin = int(string)
                 break
             border()
         super().set_bet_coin(self.bet_coin)
         while True:
             string = input('どこにBETしますか？(R,B,1-8): ')
-            if valid_list(string, Cell.NAMES):
-                self.bet_place = string
+            upper: str = string.upper()
+            if valid_list(upper, Cell.NAMES):
+                self.bet_place = upper
                 break
             border()
 

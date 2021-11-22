@@ -41,12 +41,13 @@ def coloring(color: str, string: str):
         colored_string = Color.RED + string + Color.END
     elif color == Cell.COLORS[2]:
         colored_string = Color.GREEN + string + Color.END
+    elif color == Cell.COLORS[3]:
+        colored_string = Color.YELLOW + string + Color.END
     return colored_string
 
         
 def main():
-    create_table()
-    print(Cell.table)
+    string = coloring()
 
 
 if __name__ == '__main__':
