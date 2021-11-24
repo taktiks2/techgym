@@ -16,11 +16,13 @@ class Game:
     level: str = ''
     epic_coord: str = ''
     coord: str = ''
+    continue_flag: bool = None
+    promote_flag: bool = None
     clear_flag: bool = None
 
 
 def b():
-    print('--' * 18)
+    print('--' * 24)
 
 
 def show_title():
@@ -28,7 +30,9 @@ def show_title():
 
 
 def show_level():
-    pass
+    print(f'レベル{Game.level} スタート！')
+    print('違う漢字はどこでしょう？')
+
 
 def create_board():
     size: int = Game.LEVELS[Game.level]
@@ -37,7 +41,6 @@ def create_board():
 
 
 def show_board():
-    print('違う漢字はどこでしょう？')
     for row in Game.board.create_rows():
         print(row)
 
@@ -59,6 +62,14 @@ def select_level():
 
     Game.level = string
 
+
+def promote_level():
+    if int(Game.level) < len(Game.LEVELS):
+        Game.level = str(int(Game.level) + 1)
+    else:
+        Game.clear_flag = True
+
+
 def select_coord():
     while True:
         string_list: list = []
@@ -66,9 +77,14 @@ def select_coord():
         if valid_count(string, 2):
             string_list = string
             if valid_alpha(string_list[0]) and valid_decimal(string_list[1]):
-                string = f'{string_list[0].upper}{string_list[1]}'
+                string = string_list[0].upper() + string_list[1]
                 break
-        print('※ 2文字の英数字で入力してください(例:A1)')
+        if valid_count(string, 3):
+            string_list = string
+            if valid_alpha(string_list[0]) and valid_decimal(string_list[1] + string_list[2]):
+                string = string_list[0].upper() + string_list[1] + string_list[2]
+                break
+        print('※ 2-3文字の英数字で入力してください(例:A1)')
                 
     Game.coord = string
 
@@ -77,19 +93,18 @@ def show_result():
     results: list = ['正解', '不正解']
     if Game.coord == Game.epic_coord:
         print(f'判定: 正解です！')
-        Game.clear_flag = True
+        Game.promote_flag = True
     else:
         print(f'判定: 残念、不正解です...')
         print(f'　　　正解は「{Game.epic_coord}」でした')
-        Game.clear_flag = False
+        Game.promote_flag = False
         
 
 def select_continue():
     '''ゲームを続けるかどうかの判定
-    return: bool
     '''
     msg: str = ''
-    if Game.clear_flag:
+    if is_promote():
         msg += '次のレベルを'
     else:
         msg += '続けて'
@@ -97,14 +112,32 @@ def select_continue():
         string = input(msg + 'プレイしますか？(Y/N): ')
         if valid_count(string, 1):
             if valid_alpha(string):
-                string.upper()
-                if string == 'Y' or string == 'N':
+                upper: str = string.upper()
+                if upper == 'Y' or upper == 'N':
                     break
         print('※「Y」か「N」で入力してください')
-    if string == 'Y':
-        return True
+    if upper == 'Y':
+        Game.continue_flag = True
     else:
-        return False
+        Game.continue_flag = False
+
+
+def is_continue():
+    if Game.continue_flag:
+        return True
+    return False
+
+
+def is_promote():
+    if Game.promote_flag:
+        return True
+    return False
+
+
+def is_clear():
+    if Game.clear_flag:
+        return True
+    return False
 
 
 def show_clear_msg():
@@ -116,7 +149,9 @@ def show_end_msg():
 
 
 def main():
-    pass
+    Game.level = '5'
+    promote_level()
+    print(Game.level)
 
 
 if __name__ == '__main__':
