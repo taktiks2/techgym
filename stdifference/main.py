@@ -3,9 +3,7 @@ from game import *
 
 
 def play():
-    b()
-    show_levels_table()
-    select_level()
+    show_level()
     b()
     
     create_board()
@@ -19,13 +17,31 @@ def play():
 
 def main():
     os.system('cls')
+    
+    b()
     show_title()
+    b()
+    
+    show_levels_table()
+    select_level()
+    b()
+
     while True:
-        b()
         play()
-        if select_continue():
+
+        if is_promote():
+            promote_level()
+        
+        if is_clear():
+            show_clear_msg()
+            b()
+            break
+        
+        select_continue()
+        if is_continue():
             os.system('cls')
             continue
+        
         show_end_msg()
         b()
         break
