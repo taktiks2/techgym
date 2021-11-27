@@ -1,16 +1,26 @@
+from PIL.Image import init
+from card import *
+import numpy as np
+
+
 class Settings:
     INITIAL_COIN: int = 500
 
 class Player:
+    HAND_MAX: int = 5
     
     def __init__(self):
         self.hand = []
-        pass
+        self.coin = Settings.INITIAL_COIN
+
+    def bet(self, coin: int):
+        self.coin -= coin
+        return coin
     
     def hit(self):
-        pass
+        self.hand.append(Deck.deal())
     
-    def stang(self):
+    def stand(self):
         pass
     
     def surrender(self):
@@ -23,7 +33,9 @@ class Player:
         pass
     
 
-class Dealer(Player):
+class Dealer():
+    pass
+
 
 def main():
     pass
