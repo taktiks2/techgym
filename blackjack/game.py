@@ -53,8 +53,8 @@ def surrender():
 def show_hand():
     print()    
 
+
 def set_hand_value():
-    values: list = [0, 0]
     for card in Game.player[Game.turn].hand:
         if card.number == Number.ACE:
             values[Game.SOFT_HAND] += 1
@@ -69,17 +69,19 @@ def set_hand_value():
 
 
 def judge_hand_vlaue():
+    pass
+       
+        
+def is_blackjack():
     values: list = set_hand_value()
     for value in values:
         if len(Game.player[Game.turn].hand) == 2 and value == Game.BLACKJACK:
             Game.blackjack_flag = True
-        
-    
-     
+            break
 
 
-def burst():
-    pass
+def is_burst():
+    values: list 
 
 
 def blackjack():

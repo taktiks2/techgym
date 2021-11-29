@@ -5,36 +5,15 @@ import numpy as np
 
 class Settings:
     INITIAL_COIN: int = 500
+    HAND_MAX: int = 5
+
 
 class Player:
-    HAND_MAX: int = 5
     
     def __init__(self):
-        self.hand = []
-        self.coin = Settings.INITIAL_COIN
-
-    def bet(self, coin: int):
-        self.coin -= coin
-        return coin
-    
-    def hit(self):
-        self.hand.append(Deck.deal())
-    
-    def stand(self):
-        pass
-    
-    def surrender(self):
-        pass
-    
-    def burst(self):
-        pass
-    
-    def blackjack(self):
-        pass
-    
-
-class Dealer():
-    pass
+        self.hand: list = []
+        self.hand_values: list = [0, 0]
+        self.coin: int = Settings.INITIAL_COIN
 
 
 def main():
