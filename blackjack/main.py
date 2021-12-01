@@ -47,11 +47,16 @@ def main():
             elif is_burst():
                 show_burst_msg()
                 b()
-            change_turn()
 
         if is_end():
             judge()
-
+        
+        if is_no_coin():
+            show_no_coin_msg()
+            b()
+            break
+        
+        change_turn()
         init_hand()
         init_flags()
         b()

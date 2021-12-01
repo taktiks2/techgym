@@ -23,6 +23,12 @@ def valid_alnum(string: str):
     return False
 
 
+def valid_multiple_10(num: int):
+    if num % 10 == 0:
+        return True
+    return False
+
+
 def main():
     pass
 

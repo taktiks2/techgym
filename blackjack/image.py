@@ -46,19 +46,48 @@ def load_image(num):
     return img 
 
 
+def hunite_image(images: list):
+    img = cv2.hconcat(images)
+    return img
+    
+
+def vunite_image(images: list):
+    img = cv2.vconcat(images)
+    return img
+
+
 def show_image(image):
-    ratio: float = 0.5
     img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    plt.figure(figsize=(6.0, 9.0), dpi=20)  # dpi * figsizeのピクセル数で表示される
+    plt.figure(figsize=(6.0, 9.0), dpi=30)  # dpi * figsizeのピクセル数で表示される
     plt.axis('off')
     plt.imshow(img)
-    plt.show()
+    plt.show(block=False)
+
+
+def close_image():
+    input('画像を閉じるにはEnterを押してください')
+    plt.close()
 
 
 def main():
-    # download_image()
-    split_image()
-    save_image()
+    images = []
+    images2 = []
+    images3 = []
+    img = None
+    for index in range(3):
+        img = load_image(index)
+        images.append(img)
+    for index in range(3):
+        img = load_image(index)
+        images2.append(img)
+        
+    img1 = hunite_image(images)
+    img2 = hunite_image(images2)
+    images3 = [img1, img2]
+    img = vunite_image(images3)
+    show_image(img)
+    input('enter')
+    close_image()
     
 
 if __name__ == '__main__':

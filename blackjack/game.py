@@ -1,5 +1,7 @@
 from player import *
 from card import *
+from validate import *
+from image import hunite_image, show_image, close_image
 
 
 class Game:
@@ -52,7 +54,16 @@ def set_game():
     
 
 def bet():
-    string = input('コインをベットしてください(1-500): ')
+    while True:
+        string = input('コインを10の倍数でベットしてください(10-500): ')
+        if valid_decimal(string):
+            if valid_multiple_10(int(string)):
+                break
+            else:
+                print('※ 10の倍数で入力してください')
+        else:
+            print('※ 数字を入力してください')
+
     Game.bet_coin = int(string)
 
 
@@ -79,9 +90,23 @@ def init_hand():
 
 def calc_reward():
     if Game.blackjack_flag:
-        Game.reward += Game.bet_coin * Game.RATE
+        Game.reward = int(Game.bet_coin * Game.RATE)
     else: 
         Game.reward = Game.bet_coin
+
+
+def get_card_images():
+    images = []
+    for card in Game.players[Game.turn].hand:
+        images.append(card.image)
+    return images
+
+
+def create_cards_image():
+    images = get_card_images()
+    img = hunite_image(images)
+    return img
+    
 
 
 def show_hand():
@@ -91,6 +116,9 @@ def show_hand():
             msg += f'{card.name}, '
         print(msg)
         show_values(player)
+    img = create_cards_image()
+    show_image(img)
+    close_image()
 
 
 def show_values(player):
@@ -145,22 +173,35 @@ def is_over16():
         if value > 16:
             Game.end_flag = True
             return False
-        else:
-            return True
+    return True
 
 
 def is_end():
     if Game.end_flag:
         return True
+    
+
+def is_no_coin():
+    if Game.players[Game.PLAYERS['player']].coin < 10:
+        return True
 
 
 def select_action():
-    string: str = input('ヒットかスタンドを選んでください(H/S): ')
-    if string == 'H' or string == 'h':
+    while True:
+        string: str = input('ヒットかスタンドを選んでください(H/S): ')
+        if valid_count(string, 1):
+            upper_string: str = string.upper()
+            if upper_string == 'H' or upper_string == 'S':
+                break
+            else:
+                print("※ 'H'か'S'で入力してください")
+        else:
+            print('※ １文字で入力してくさい')
+    if upper_string == 'H':
         hit()
         set_hand_value()
         show_hand()
-    elif string == 'S' or string == 's':
+    elif upper_string == 'S':
         stand()
         change_turn()        
 
@@ -187,6 +228,10 @@ def show_blackjack_msg():
     print('ブラックジャック')
     Game.end_flag = True
 
+def show_no_coin_msg():
+    print('持ちコインがなくなりました')
+    print('ゲームを終了します')
+
 
 def get_higher_values():
     player_value: int = 0
@@ -201,7 +246,7 @@ def get_higher_values():
 
 
 def request_enter():
-    input('続けるにはENTERを押してください')
+    input('続けるにはEnterを押してください')
 
     
 def win():
@@ -214,6 +259,7 @@ def win():
 def lose():
     sub_coin()
     print('dealerの勝ち')
+    print(f'{Game.bet_coin}コインを失いました')
 
 
 def draw():
@@ -222,30 +268,30 @@ def draw():
 
 def judge():
     if Game.turn == Game.PLAYERS['player'] and Game.blackjack_flag:
-        print('debug: 1')
+        #print('debug: 1')
         win()
     elif Game.turn == Game.PLAYERS['dealer'] and Game.blackjack_flag:
-        print('debug: 2')
+        #print('debug: 2')
         lose()
     elif Game.player_burst_flag and Game.dealer_burst_flag:
-        print('debug: 3')
+        #print('debug: 3')
         draw()
     elif not Game.player_burst_flag and Game.dealer_burst_flag:
-        print('debug: 4')
+        #print('debug: 4')
         win()
     elif not Game.dealer_burst_flag and Game.player_burst_flag:
-        print('debug: 5')
+        #print('debug: 5')
         lose()
     else:
         player, dealer = get_higher_values()
         if player == dealer:
-            print('debug: 6')
+            #print('debug: 6')
             draw()
         elif player > dealer:
-            print('debug: 7')
+            #print('debug: 7')
             win()
         else:
-            print('debug: 8')
+            #print('debug: 8')
             lose()
         
 
