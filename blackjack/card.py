@@ -29,8 +29,26 @@ class Number(Enum):
 class Card:
     SUIT: int = 4
     NUMBER: int = 13
+    SUIT_STR: list = ['♥',
+                      '♠',
+                      '♦',
+                      '♣']
+    NUMBER_STR: list = ['A',
+                        '2',
+                        '3',
+                        '4',
+                        '5',
+                        '6',
+                        '7',
+                        '8',
+                        '9',
+                        '10',
+                        'J',
+                        'Q',
+                        'K']
     
-    def __init__(self, suit: Suit, number: Number, image):
+    def __init__(self, name: str, suit: Suit, number: Number, image):
+        self.name = name
         self.suit = suit
         self.number = number
         self.image = image
@@ -54,7 +72,8 @@ class Deck:
         index: int = 0
         for suit in range(1, Card.SUIT + 1):
             for number in range(1, Card.NUMBER + 1):
-                card = Card(Suit(suit), Number(number), self.card_images[index])
+                name = Card.SUIT_STR[suit - 1] + Card.NUMBER_STR[number - 1]
+                card = Card(name, Suit(suit), Number(number), self.card_images[index])
                 self.cards[index] = card
                 index += 1
     
@@ -63,15 +82,20 @@ class Deck:
 
     def deal(self):
         card = self.cards[-1]
-        np.delere(self.cards, -1)
+        self.cards = np.delete(self.cards, -1)
         return card
 
     
 def main():
     deck = Deck()
     print(len(deck.cards))
-    print(deck.cards[34])
-    show_image(deck.cards[34].image)
+    print(deck.deal().name)
+    print(deck.deal().name)
+    print(deck.deal().name)
+    print(deck.deal().name)
+    print(deck.deal().name)
+    print(deck.deal().name)
+    print(len(deck.cards))
 
 
 if __name__ == '__main__':
