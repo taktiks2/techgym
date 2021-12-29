@@ -2,8 +2,6 @@ import pandas as pd
 from urllib import request
 from IPython.core.display import display
 
-
-
 def main():
     
     DATA = 'adult+stretch.data'
